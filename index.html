@@ -179,9 +179,7 @@
     transition:opacity 0.1s ease;
   }
 
-  /* ------------------------------
-     NEW: Horror Name Popup
-  ------------------------------ */
+  /* Horror Name Popup */
   #namePopupBg {
     position: fixed;
     top:0; left:0;
@@ -209,7 +207,7 @@
     50% {opacity:0.8;}
     100% {opacity:1;}
   }
-  #nameInput {
+  #nameEntry {
     width:90%;
     padding:10px;
     background:black;
@@ -230,6 +228,7 @@
     width:100%;
   }
   #nameSubmit:hover { background:red; }
+
 </style>
 </head>
 
@@ -237,22 +236,27 @@
 
 <h1 class="glitch">Do NOT press any buttons.</h1>
 
-<!-- Buttons -->
+<!-- MAIN Buttons -->
 <button id="btn1" class="warningBtn">DON'T PRESS THIS</button>
 <button id="btn2" class="warningBtn">DO NOT LOOK HERE</button>
 <button id="btn3" class="warningBtn">SERIOUSLY, STOP</button>
 <button id="btnAI" class="warningBtn">Do you want to know how I feel?</button>
 <button id="btnKnow" class="warningBtn">I know you…</button>
 
+<!-- MUSIC Buttons -->
+<button id="btnChristmas" class="warningBtn">Play Christmas Song</button>
+<button id="btnRoar" class="warningBtn">Play Roar</button>
+<button id="btnStop" class="warningBtn">Stop Music</button>
+
 <div id="msgBox"></div>
 
 <!-- Screens -->
-<div id="dareScreen"    class="scareScreen"><span>HOW DARE YOU</span><button class="backBtn">Go Back</button></div>
-<div id="warnScreen"    class="scareScreen"><span>I WARNED YOU</span><button class="backBtn">Go Back</button></div>
-<div id="stopScreen"    class="scareScreen"><span>YOU NEVER LISTEN</span><button class="backBtn">Go Back</button></div>
-<div id="presenceScreen"class="scareScreen"><span>WHY ARE YOU STILL HERE?</span><button class="backBtn">Go Back</button></div>
+<div id="dareScreen" class="scareScreen"><span>HOW DARE YOU</span><button class="backBtn">Go Back</button></div>
+<div id="warnScreen" class="scareScreen"><span>I WARNED YOU</span><button class="backBtn">Go Back</button></div>
+<div id="stopScreen" class="scareScreen"><span>YOU NEVER LISTEN</span><button class="backBtn">Go Back</button></div>
+<div id="presenceScreen" class="scareScreen"><span>WHY ARE YOU STILL HERE?</span><button class="backBtn">Go Back</button></div>
 <div id="delayedScreen" class="scareScreen"><span>YOU SHOULDN’T HAVE STAYED THIS LONG</span><button class="backBtn">Go Back</button></div>
-<div id="aiScreen"      class="scareScreen"><span>SYSTEM STATUS: NOT STABLE</span><button class="backBtn">Go Back</button></div>
+<div id="aiScreen" class="scareScreen"><span>SYSTEM STATUS: NOT STABLE</span><button class="backBtn">Go Back</button></div>
 
 <div id="knowScreen" class="scareScreen">
   <span id="knowText"></span>
@@ -285,17 +289,42 @@
 <div id="namePopupBg">
   <div id="namePopup">
     <h2>What's your name?</h2>
-    <input id="nameInput" placeholder="e.g., John">
+    <input id="nameEntry" placeholder="e.g., John">
     <button id="nameSubmit">Continue</button>
   </div>
 </div>
 
+<!-- BACKGROUND MUSIC -->
+<audio id="bgMusic" loop></audio>
+
 <script>
 
-/* --------------------------------------------------------
-      NEW: Name popup system + saving + validation
---------------------------------------------------------- */
+/* MUSIC SYSTEM */
+const music = document.getElementById("bgMusic");
 
+const christmasURL = "https://brave-gold-jtxmnkydmb-ojdyi32xnh.edgeone.dev/Mariah%20Carey%20-%20All%20I%20Want%20for%20Christmas%20Is%20You%20(Make%20My%20Wish%20Come%20True%20Edition).mp3";
+const roarURL      = "https://supposed-beige-na4ctj6y1a-sdwq8d6tb9.edgeone.dev/Katy%20Perry%20-%20Roar.mp3";
+
+function playMusic(url){
+  music.src = url;
+  music.volume = 0.5;
+  music.play().catch(()=>{});
+}
+
+function stopMusic(){
+  music.pause();
+}
+
+document.getElementById("btnChristmas").onclick = ()=> playMusic(christmasURL);
+document.getElementById("btnRoar").onclick      = ()=> playMusic(roarURL);
+document.getElementById("btnStop").onclick      = ()=> stopMusic();
+
+/* AUTO PLAY ROAR ON LOAD */
+window.addEventListener("load", ()=>{
+  playMusic(roarURL);
+});
+
+/* NAME POPUP SYSTEM */
 let userName = null;
 
 function capitalizeName(n){
@@ -329,21 +358,18 @@ function setName(n){
   document.getElementById("knowText").innerText = "I already knew your name, " + n + ".";
 }
 
-/* On page load */
 window.onload = function(){
   let saved = localStorage.getItem("horrorName");
   if(saved){
     userName = saved;
     setName(saved);
-  }
-  else {
+  } else {
     openPopup();
   }
 };
 
-/* popup button */
 document.getElementById("nameSubmit").onclick = function(){
-  let val = document.getElementById("nameInput").value.trim();
+  let val = document.getElementById("nameEntry").value.trim();
   if(!validName(val)){
     alert("Enter a real name (letters only).");
     return;
@@ -353,9 +379,7 @@ document.getElementById("nameSubmit").onclick = function(){
   closePopup();
 };
 
-/* -----------------------------
-   Existing Functions
------------------------------ */
+/* HORROR SYSTEM — everything below untouched */
 
 function showMsg(t){
   const m=document.getElementById("msgBox");
@@ -403,7 +427,7 @@ document.getElementById("globalBack").onclick=()=>{
   });
 };
 
-/* Cursor shake */
+/* Cursor Shake */
 function cursorShake(){
   if(Math.random()<0.1){
     document.body.style.cursor="none";
@@ -434,7 +458,7 @@ setTimeout(()=>{
   setTimeout(()=>d.style.opacity=0,50);
 }, Math.random()*12000+8000);
 
-/* Shadow */
+/* Corner Shadow */
 setInterval(()=>{
   if(Math.random()<0.15){
     const c=document.getElementById("cornerShadow");
@@ -450,7 +474,7 @@ setTimeout(()=>{
   setTimeout(()=>b.style.opacity=0,2500);
 },45000);
 
-/* Idle presence */
+/* Idle Presence */
 let lastMove=Date.now();
 document.addEventListener("mousemove",()=>lastMove=Date.now());
 setInterval(()=>{
@@ -466,7 +490,6 @@ setTimeout(()=>{
   const s=document.getElementById("terminalScreen");
   let text="ACCESSING MEMORY NODE…\n...\nYou ignored me last time, "+userName+".";
   let i=0;
-
   s.style.opacity=1;
   function type(){
     t.innerText=text.slice(0,i);
@@ -568,7 +591,7 @@ function playHeartbeat(){
 }
 setInterval(()=>{ if(Math.random()<0.05) playHeartbeat(); },3000);
 
-/* Shadow walker */
+/* Shadow Walker */
 setInterval(()=>{
   if(Math.random()<0.08){
     const w=document.getElementById("walkerShadow");
@@ -581,7 +604,7 @@ setInterval(()=>{
   }
 },9000);
 
-/* Glitch bursts */
+/* Glitch */
 function glitchBurst(){
   const g=document.getElementById("glitchOverlay");
   g.style.opacity=1;
