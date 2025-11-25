@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Scary Interactive Page</title>
+<title> i’m fine — leave. </title>
 
 <style>
   body {
@@ -69,6 +69,18 @@
     white-space: pre-line;
   }
 
+  #backBtn {
+    position: absolute;
+    bottom: 40px;
+    padding: 15px 25px;
+    background: darkred;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: none;
+  }
+
   #jumpscare {
     font-size: 100px;
     color: white;
@@ -77,18 +89,13 @@
     transition: opacity 0.2s ease;
   }
 
-  /* Glitch text effect */
-  .glitch {
-    animation: glitch 0.3s infinite;
-  }
-
+  .glitch { animation: glitch 0.3s infinite; }
   @keyframes glitch {
     0% { text-shadow: 3px 3px red; }
     50% { text-shadow: -3px -3px #800; }
     100% { text-shadow: 2px -2px darkred; }
   }
 
-  /* Static noise overlay */
   #staticOverlay {
     position: fixed;
     top: 0;
@@ -109,7 +116,6 @@
     transition: opacity 0.3s ease;
   }
 
-  /* Shadow figure */
   #shadowFigure {
     position: fixed;
     bottom: 0;
@@ -123,10 +129,7 @@
     transition: opacity 2.5s ease;
   }
 
-  .flicker {
-    animation: flickerAnim 0.2s infinite;
-  }
-
+  .flicker { animation: flickerAnim 0.2s infinite; }
   @keyframes flickerAnim {
     0% { opacity: 1; }
     50% { opacity: 0.3; }
@@ -144,16 +147,25 @@
 <button id="btn3" class="warningBtn">SERIOUSLY, STOP</button>
 <button id="btnAI" class="warningBtn">Do you want to know how I feel?</button>
 
+<!-- NEW BUTTON -->
+<button id="btnKnow" class="warningBtn">I know you...</button>
+
 <div id="msgBox"></div>
 
 <div id="dareScreen" class="scareScreen">HOW DARE YOU</div>
 <div id="warnScreen" class="scareScreen">I WARNED YOU</div>
 <div id="stopScreen" class="scareScreen">YOU NEVER LISTEN</div>
 
-<div id="presenceScreen" class="scareScreen">WHY ARE YOU STILL HERE?</div>
+<div id="presenceScreen" class="scareScreen">
+  WHY ARE YOU STILL HERE?
+  <button id="backBtn">Go back</button>
+</div>
+
 <div id="delayedScreen" class="scareScreen">YOU SHOULDN'T HAVE STAYED THIS LONG</div>
 
 <div id="aiScreen" class="scareScreen">SYSTEM STATUS: NOT STABLE</div>
+
+<div id="knowScreen" class="scareScreen">you work in sris right?</div>
 
 <div id="terminalScreen" class="scareScreen"></div>
 
@@ -163,49 +175,39 @@
 <div id="jumpscare" class="scareScreen">BOO</div>
 
 <script>
-/* --- Audio --- */
+/* Audio */
 const whisperAudio = new Audio("https://www.myinstants.com/media/sounds/creepy-whisper.mp3");
 whisperAudio.volume = 0.4;
-
 function randomWhisper() {
   if (Math.random() < 0.25) whisperAudio.play();
   setTimeout(randomWhisper, 6000);
 }
 randomWhisper();
 
-/* Heartbeat sound */
-function playHeartbeat() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-
-  osc.frequency.value = 60;
-  gain.gain.setValueAtTime(0.7, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.3);
+function playHeartbeat(){
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.frequency.value=60;
+  gain.gain.setValueAtTime(0.7,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.2);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime+0.3);
 }
-setInterval(() => { if (Math.random() < 0.1) playHeartbeat(); }, 2500);
+setInterval(()=>{ if(Math.random()<0.1) playHeartbeat(); },2500);
 
-/* Distortion tone */
-function playDistortion() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = "square";
-  osc.frequency.value = 200 + Math.random()*400;
-  gain.gain.setValueAtTime(0.7, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.4);
+function playDistortion(){
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type="square";
+  osc.frequency.value=200+Math.random()*400;
+  gain.gain.setValueAtTime(0.7,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.4);
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime+0.4);
 }
 
-/* --- Message box --- */
 function showMsg(t){
   const m=document.getElementById("msgBox");
   m.innerText=t;
@@ -213,7 +215,6 @@ function showMsg(t){
   setTimeout(()=>m.style.opacity=0,2000);
 }
 
-/* --- Scare helper --- */
 function showScare(id,msg){
   const s=document.getElementById(id);
   s.style.opacity=1;
@@ -222,39 +223,46 @@ function showScare(id,msg){
   showMsg(msg);
 }
 
-/* --- Buttons --- */
 btn1.onclick=()=>showScare("dareScreen","...you shouldn't have done that.");
 btn2.onclick=()=>showScare("warnScreen","You were told not to look.");
 btn3.onclick=()=>showScare("stopScreen","I told you to stop...");
 
-/* --- NEW AI button --- */
 btnAI.onclick=()=>{
   const s=document.getElementById("aiScreen");
   s.innerText="SYSTEM STATUS: NOT STABLE";
   s.style.opacity=1;
-
-  setTimeout(()=>{
-    playDistortion();
-    s.innerText="!!! SYSTEM ERROR !!!\nEMOTIONAL CORE MALFUNCTION\n<DATA SCREAM>";
-  },1500);
-
+  setTimeout(()=>{ playDistortion(); s.innerText="!!! SYSTEM ERROR !!!\nEMOTIONAL CORE MALFUNCTION\n<DATA SCREAM>"; },1500);
   setTimeout(()=>{ s.innerText="ERROR… rebooting emotional processor…"; },3000);
-
-  setTimeout(()=>{
-    s.innerText="APOLOGY:\nSYSTEM MALFUNCTION.\nPLEASE DISREGARD THAT.";
-  },5000);
-
+  setTimeout(()=>{ s.innerText="APOLOGY:\nSYSTEM MALFUNCTION.\nPLEASE DISREGARD THAT."; },5000);
   setTimeout(()=>{ s.style.opacity=0; },7500);
 };
 
-/* --- Cursor flicker --- */
+/* NEW "I know you..." button */
+btnKnow.onclick=()=>{
+  const s=document.getElementById("knowScreen");
+  s.style.opacity=1;
+  setTimeout(()=>{ s.style.opacity=0; },5000);
+};
+
+/* Restore button for presenceScreen */
+document.getElementById("presenceScreen").onclick=()=>{
+  document.getElementById("backBtn").style.display="block";
+};
+document.getElementById("backBtn").onclick=(e)=>{
+  e.stopPropagation();
+  const p=document.getElementById("presenceScreen");
+  p.style.opacity=0;
+  p.style.pointerEvents="none";
+  document.getElementById("backBtn").style.display="none";
+  document.body.classList.remove("flicker");
+};
+
 function cursorFlicker(){
   document.body.style.cursor=Math.random()<0.1?"none":"default";
   setTimeout(cursorFlicker,500);
 }
 cursorFlicker();
 
-/* --- Distort --- */
 function distort(){
   if(Math.random()<0.07){
     document.body.style.transform="scale(1.05) rotate(1deg)";
@@ -264,7 +272,6 @@ function distort(){
 }
 distort();
 
-/* --- Scroll scare --- */
 window.addEventListener("scroll",()=>{
   if(window.scrollY>200){
     showMsg("Stop scrolling... I see you.");
@@ -273,7 +280,7 @@ window.addEventListener("scroll",()=>{
   }
 });
 
-/* --- Presence detector --- */
+/* Presence detector */
 let lastMove=Date.now();
 document.addEventListener("mousemove",()=>lastMove=Date.now());
 
@@ -283,17 +290,17 @@ setInterval(()=>{
   }
 },2000);
 
-/* --- Fake tracking code --- */
+/* Fake tracking */
 setInterval(()=>{
   if(Math.random()<0.03){
     showMsg("Tracking node: XZ-"+Math.floor(Math.random()*9999)+"-Ω");
   }
 },5000);
 
-/* --- Delayed scare --- */
+/* Delayed scare */
 setTimeout(()=>showScare("delayedScreen","Something followed you here."),25000);
 
-/* --- Random jumpscare --- */
+/* Random jumpscare */
 function randomJumpscare(){
   const j=document.getElementById("jumpscare");
   if(Math.random()<0.1){
@@ -308,7 +315,7 @@ function randomJumpscare(){
 }
 randomJumpscare();
 
-/* --- Shadow figure randomly appears --- */
+/* Shadow figure */
 setInterval(()=>{
   if(Math.random()<0.1){
     const sf=document.getElementById("shadowFigure");
@@ -317,7 +324,7 @@ setInterval(()=>{
   }
 },10000);
 
-/* --- Fake terminal message including Option E --- */
+/* Terminal */
 setTimeout(()=>{
   const t=document.getElementById("terminalScreen");
   t.style.opacity=1;
@@ -332,8 +339,8 @@ setTimeout(()=>{
   type();
 },55000);
 
-/* --- Timed creepy messages --- */
-setTimeout(()=>showMsg("Why are you still here?"),10000);
+/* Timed messages (modified: 5 sec for first one) */
+setTimeout(()=>showMsg("Why are you still here?"),5000);
 setTimeout(()=>showMsg("I'm closer than you think."),18000);
 setTimeout(()=>showMsg("Something is watching you."),32000);
 setTimeout(()=>showMsg("You shouldn't have stayed this long."),45000);
