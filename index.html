@@ -1,415 +1,223 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>I’m Fine — Leave.</title>
+<title>Walk in the Light</title>
 
 <style>
-/* FONT (fallback using Arial) */
 @font-face {
   font-family: "Poppins";
   src: local("Arial");
 }
 
-/* BASE */
 body {
-  background: black;
-  color: red;
-  font-family: "Courier New", monospace;
+  background: #f7faff;
+  color: #003366;
+  font-family: "Poppins", sans-serif;
   text-align: center;
-  padding: 40px;
+  padding: 20px;
   overflow-x: hidden;
-  transition: background 0.4s ease, color 0.4s ease;
+  margin: 0;
 }
 
-body.christianMode {
-  background: white !important;
-  color: black !important;
+/* Header Cross */
+#topCross {
+  font-size: 80px;
+  color: #0066ff;
+  text-shadow: 0 0 25px #80bfff;
+  margin-top: 20px;
+  animation: crossFloat 5s ease-in-out infinite;
 }
 
-/* BUTTONS */
-.warningBtn {
-  padding: 15px 25px;
-  background: darkred;
+@keyframes crossFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Buttons */
+.musicBtn {
+  padding: 14px 25px;
+  background: #0066ff;
   color: white;
   border: none;
   font-size: 20px;
   cursor: pointer;
-  margin: 20px auto;
-  display: block;
-  width: 80%;
-  max-width: 320px;
-  transition: background 0.3s ease;
+  margin: 15px auto;
+  width: 85%;
+  max-width: 340px;
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+  transition: background 0.3s, transform 0.2s;
 }
-.warningBtn:hover { background: red; }
-
-body.christianMode .warningBtn {
-  background: #0077ff !important;
-  color: white !important;
-}
-body.christianMode .warningBtn:hover {
-  background: #3399ff !important;
+.musicBtn:hover {
+  background: #338aff;
+  transform: scale(1.02);
 }
 
-/* HORROR SCREENS */
-.scareScreen {
-  position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: black; color: darkred;
-  font-size: 42px;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  padding: 20px; text-align: center;
-  white-space: pre-line;
-  opacity: 0; pointer-events: none;
-  transition: opacity 1s ease;
-  z-index: 999998;
-}
-body.christianMode .scareScreen {
-  background: white !important;
-  color: #0044aa !important;
-}
-
-.backBtn {
+/* Scripture Box */
+#scriptureBox {
   margin-top: 40px;
-  padding: 12px 20px;
-  background: darkred;
-  color: white;
-  border: none;
-  font-size: 20px;
-  display: none;
+  font-size: 22px;
+  color: #0044aa;
+  padding: 15px;
+  width: 90%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
-body.christianMode .backBtn { background: #0077ff !important; }
 
-/* -------- HOLY FLOATING TEXT — NO CLASH -------- */
+/* Floating holy text */
 .holyFloat {
   position: fixed;
-  bottom: 10%;
-  font-size: 28px;
-  color: #005eff;
+  bottom: 8%;
+  font-size: 26px;
+  color: #338aff;
   opacity: 0;
   white-space: nowrap;
   pointer-events: none;
-  z-index: 999999999;
-  font-family: "Poppins", sans-serif;
-  display: none;
+  z-index: 9999999;
+  display: block;
 }
 
-/* LEFT SIDE FLOAT */
+/* Left side */
 .float1 {
-  left: 20%;
-  animation: holyFloat1 10s linear infinite;
+  left: 10%;
+  animation: holyFloat1 12s linear infinite;
   animation-delay: 0s;
 }
 
-/* RIGHT SIDE FLOAT */
+/* Right side */
 .float2 {
-  left: 80%;
-  animation: holyFloat2 14s linear infinite;
-  animation-delay: 4s;
+  right: 8%;
+  animation: holyFloat2 16s linear infinite;
+  animation-delay: 5s;
 }
 
-/* Float #1 path */
 @keyframes holyFloat1 {
   0%   { transform: translateY(80px); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(-200px); opacity: 0; }
-}
-
-/* Float #2 path */
-@keyframes holyFloat2 {
-  0%   { transform: translateY(120px); opacity: 0; }
   15%  { opacity: 1; }
   85%  { opacity: 1; }
-  100% { transform: translateY(-240px); opacity: 0; }
+  100% { transform: translateY(-220px); opacity: 0; }
 }
 
-body.christianMode .holyFloat {
-  display: block;
+@keyframes holyFloat2 {
+  0%   { transform: translateY(100px); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(-260px); opacity: 0; }
 }
 
-/* NAME POPUP */
-#namePopupBg {
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(4px);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index: 99999999;
-  opacity:0; pointer-events:none;
-  transition: opacity 0.5s ease;
-}
-#namePopup {
-  background: rgba(20,0,0,0.9);
-  border:1px solid red;
-  padding:30px;
-  width:80%;
-  max-width:340px;
-  text-align:center;
-  color:red;
-  box-shadow:0 0 20px red;
-}
-#nameEntry {
-  width:90%;
-  padding:10px;
-  background:black;
-  border:1px solid red;
-  color:white;
-  text-align:center;
-  font-size:18px;
-  margin-top:15px;
-}
-#nameSubmit {
-  margin-top:20px;
-  padding:10px 20px;
-  background:darkred;
-  color:white;
-  border:none;
-  cursor:pointer;
-  font-size:18px;
-  width:100%;
-}
-
-/* -------- CHRISTIAN MODE VISUALS -------- */
-
-#holyCross {
-  position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 100px;
-  color: #0077ff;
-  text-shadow: 0 0 30px #6ab3ff, 0 0 60px #4d9cff;
-  opacity: 0;
-  z-index: 9999999;
-  display: none;
-  pointer-events:none;
-}
-body.christianMode #holyCross {
-  display: block;
-  opacity: 1;
-  animation: crossFloat 6s ease-in-out infinite;
-}
-@keyframes crossFloat {
-  0% { transform: translate(-50%, -10px); }
-  50% { transform: translate(-50%, -30px); }
-  100% { transform: translate(-50%, -10px); }
-}
-
-#holySpotlight {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%);
-  opacity: 0;
-  display: none;
-  pointer-events:none;
-  z-index: 9998;
-  animation: rotateLight 15s linear infinite;
-}
-@keyframes rotateLight {
-  0%{ transform: rotate(0deg); }
-  100%{ transform: rotate(360deg); }
-}
-body.christianMode #holySpotlight {
-  display:block;
-  opacity:1;
-}
-
-#scriptureBox {
-  position: fixed;
-  bottom: 15%;
-  width: 100%;
-  text-align: center;
-  font-size: 22px;
-  color: #0055dd;
-  opacity: 0;
-  display: none;
-  pointer-events:none;
-  font-family: "Poppins", sans-serif;
-}
-body.christianMode #scriptureBox { display: block; }
-
+/* Holy pulse */
 #holyPulse {
   position: fixed;
-  top: 30%;
+  top: 35%;
   left: 50%;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(0,136,255,0.4), transparent 70%);
+  background: radial-gradient(circle, rgba(0,136,255,0.35), transparent 70%);
   border-radius: 50%;
-  opacity: 0;
+  opacity: 0.6;
   pointer-events:none;
-  display:none;
-  z-index: 999999;
-  transition: opacity 1s ease;
+  z-index: -1;
 }
-body.christianMode #holyPulse { display:block; }
+
+/* Hero text */
+#heroText {
+  font-size: 28px;
+  margin-top: 10px;
+  color: #0040a0;
+  text-shadow: 0px 0px 10px #dcecff;
+}
+
+/* Footer */
+footer {
+  margin-top: 80px;
+  font-size: 14px;
+  color: #668;
+}
 
 </style>
 </head>
 
 <body>
 
-<h1>Do NOT press any buttons.</h1>
+<div id="topCross">✝</div>
+<div id="heroText">Welcome. Walk in the light of Christ.</div>
 
-<button id="btn1" class="warningBtn">DON'T PRESS THIS</button>
-<button id="btn2" class="warningBtn">DO NOT LOOK HERE</button>
-<button id="btn3" class="warningBtn">SERIOUSLY, STOP</button>
-<button id="btnAI" class="warningBtn">Do you want to know how I feel?</button>
-<button id="btnKnow" class="warningBtn">I know you…</button>
+<!-- MUSIC BUTTONS -->
+<button class="musicBtn" id="btnChristmas">Play Christmas Song</button>
+<button class="musicBtn" id="btnHoly">Play Holy Forever</button>
+<button class="musicBtn" id="btnGospel">Play Use This Gospel</button>
+<button class="musicBtn" id="btnStop">Stop Music</button>
 
-<button id="btnChristmas" class="warningBtn">Play Christmas Song</button>
-<button id="btnRoar" class="warningBtn">Play Roar</button>
-<button id="btnHoly" class="warningBtn">Play Holy Forever</button>
-<button id="btnGospel" class="warningBtn">Play Use This Gospel</button>
-<button id="btnStop" class="warningBtn">Stop Music</button>
-
-<!-- FLOATING TEXT (CHRISTIAN MODE ONLY) -->
+<!-- FLOAT TEXT -->
 <div class="holyFloat float1">Jesus come save me</div>
-<div class="holyFloat float2">I'm armed with Jesus, my weapon is prayer.</div>
+<div class="holyFloat float2">I’m armed with Jesus, my weapon is prayer.</div>
 
-<!-- HOLY VISUALS -->
-<div id="holyCross">✝</div>
-<div id="holySpotlight"></div>
+<!-- PULSE -->
 <div id="holyPulse"></div>
+
+<!-- SCRIPTURE BOX -->
 <div id="scriptureBox"></div>
-
-<!-- HORROR SCREENS -->
-<div id="dareScreen" class="scareScreen"><span>HOW DARE YOU</span><button class="backBtn">Go Back</button></div>
-<div id="warnScreen" class="scareScreen"><span>I WARNED YOU</span><button class="backBtn">Go Back</button></div>
-<div id="stopScreen" class="scareScreen"><span>YOU NEVER LISTEN</span><button class="backBtn">Go Back</button></div>
-<div id="aiScreen" class="scareScreen"><span>SYSTEM FAILURE</span><button class="backBtn">Go Back</button></div>
-<div id="nameScreen" class="scareScreen"><span id="nameInput">Isn’t your name… <span id="fakeGuess" style="color:white;"></span>?</span><button class="backBtn">Go Back</button></div>
-
-<!-- NAME POPUP -->
-<div id="namePopupBg">
-  <div id="namePopup">
-    <h2>What's your name?</h2>
-    <input id="nameEntry" placeholder="e.g., John">
-    <button id="nameSubmit">Continue</button>
-  </div>
-</div>
 
 <audio id="bgMusic" loop></audio>
 
 <script>
-/* MUSIC */
-const music=document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
 
-const christmasURL="https://files.catbox.moe/iqqvwu.mp3";
-const roarURL="https://files.catbox.moe/21chs1.mp3";
-const holyURL="https://files.catbox.moe/q0n9yh.mp3";
-const gospelURL="https://files.catbox.moe/frtvpr.mp3";
+const christmasURL = "https://files.catbox.moe/iqqvwu.mp3";
+const holyURL      = "https://files.catbox.moe/q0n9yh.mp3";
+const gospelURL    = "https://files.catbox.moe/frtvpr.mp3";
 
 function playMusic(url){
-  music.src=url;
-  music.volume=1.0;
+  music.src = url;
+  music.load();
   music.play().catch(()=>{});
 }
 
-function setHorrorMode(){ document.body.classList.remove("christianMode"); }
-function setChristianMode(){ document.body.classList.add("christianMode"); startScriptureCycle(); }
-
-/* SAFARI FIX */
-btnRoar.onclick=()=>{ music.load(); playMusic(roarURL); setHorrorMode(); };
-btnChristmas.onclick=()=>{ music.load(); playMusic(christmasURL); setHorrorMode(); };
-btnHoly.onclick=()=>{ music.load(); playMusic(holyURL); setChristianMode(); };
-btnGospel.onclick=()=>{ music.load(); playMusic(gospelURL); setChristianMode(); };
-btnStop.onclick=()=>music.pause();
-
-/* NAME SYSTEM */
-let userName=null;
-
-function capitalizeName(n){ return n.split(" ").filter(w=>w).map(w=>w[0].toUpperCase()+w.slice(1).toLowerCase()).join(" "); }
-function validName(n){ return /^[A-Za-z .'-]{2,40}$/.test(n.trim()); }
-
-function openPopup(){ namePopupBg.style.opacity=1; namePopupBg.style.pointerEvents="all"; }
-function closePopup(){ namePopupBg.style.opacity=0; namePopupBg.style.pointerEvents="none"; }
-
-function setName(n){
-  userName=n;
-  localStorage.setItem("horrorName",n);
-  fakeGuess.innerText=n;
-}
-
-nameSubmit.onclick=()=>{
-  let val=nameEntry.value.trim();
-  if(!validName(val)){ alert("Enter a real name."); return; }
-  setName(capitalizeName(val));
-  closePopup();
-};
-
-window.onload=()=>{
-  let saved=localStorage.getItem("horrorName");
-  if(saved){ setName(saved); }
-  else openPopup();
-};
+btnChristmas.onclick = ()=> playMusic(christmasURL);
+btnHoly.onclick      = ()=> playMusic(holyURL);
+btnGospel.onclick    = ()=> playMusic(gospelURL);
+btnStop.onclick      = ()=> music.pause();
 
 /* SCRIPTURES */
-const scriptures=[
-  "The Lord is my light and my salvation — whom shall I fear? (Psalm 27:1)",
-  "No weapon forged against you will prevail. (Isaiah 54:17)",
-  "Even though I walk through the valley of the shadow of death, I will fear no evil. (Psalm 23:4)",
-  "The light shines in the darkness, and the darkness has not overcome it. (John 1:5)",
-  "He will command His angels concerning you to guard you. (Psalm 91:11)"
+const scriptures = [
+  "The Lord is my shepherd; I shall not want. (Psalm 23:1)",
+  "For God so loved the world that He gave His only Son. (John 3:16)",
+  "The Lord is my light and my salvation—whom shall I fear? (Psalm 27:1)",
+  "I can do all things through Christ who strengthens me. (Phil 4:13)",
+  "Be strong and courageous, for the Lord is with you. (Joshua 1:9)"
 ];
 
-let scriptureIndex=0, scriptureInterval=null;
+let index = 0;
+const box = document.getElementById("scriptureBox");
 
-function startScriptureCycle(){
-  const box=document.getElementById("scriptureBox");
-  if(scriptureInterval) clearInterval(scriptureInterval);
-
-  function showNext(){
-    if(!document.body.classList.contains("christianMode")) return;
-    box.innerText=scriptures[scriptureIndex];
-    box.style.opacity=1;
-    setTimeout(()=>box.style.opacity=0,5000);
-    scriptureIndex=(scriptureIndex+1)%scriptures.length;
-  }
-
-  showNext();
-  scriptureInterval=setInterval(showNext,8000);
+function showScripture(){
+  box.style.opacity = 0;
+  setTimeout(()=>{
+    box.innerText = scriptures[index];
+    box.style.opacity = 1;
+    index = (index + 1) % scriptures.length;
+  }, 500);
 }
+showScripture();
+setInterval(showScripture, 7000);
 
-/* PULSE */
+/* Holy pulse animation */
 setInterval(()=>{
-  if(!document.body.classList.contains("christianMode")) return;
-  let vol=Math.random()*0.6+0.2;
-  holyPulse.style.transform=`translate(-50%, -50%) scale(${1+vol})`;
-  holyPulse.style.opacity=0.3+vol;
-},200);
+  const pulse = document.getElementById("holyPulse");
+  let scale = Math.random() * 0.4 + 1.0;
+  pulse.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}, 400);
 
-/* HORROR BUTTONS */
-btn1.onclick=()=>showScare("dareScreen","How dare you, "+userName);
-btn2.onclick=()=>showScare("warnScreen","You were told not to look, "+userName);
-btn3.onclick=()=>showScare("stopScreen","You never listen, "+userName);
-btnAI.onclick=()=>showScare("aiScreen","SYSTEM FAILURE\n"+userName+", step away.");
-btnKnow.onclick=()=>showScare("nameScreen");
-
-function showScare(id,text){
-  const s=document.getElementById(id);
-  if(text) s.querySelector("span").innerText=text;
-  s.style.opacity=1;
-  s.style.pointerEvents="all";
-  s.querySelector(".backBtn").style.display="block";
-}
-
-document.querySelectorAll(".backBtn").forEach(btn=>btn.onclick=(e)=>hideScare(e.target.parentElement.id));
-
-function hideScare(id){
-  const s=document.getElementById(id);
-  s.style.opacity=0;
-  s.style.pointerEvents="none";
-}
 </script>
+
+<footer>© 2025 Walking in His Light Ministry by Hailey L</footer>
 
 </body>
 </html>
