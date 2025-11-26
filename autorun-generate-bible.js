@@ -1,6 +1,5 @@
 import fs from "fs";
 import https from "https";
-
 // Clean, stable KJV JSON source
 const url = "https://raw.githubusercontent.com/thiagobodruk/bible/master/json/kjv.json";
 
